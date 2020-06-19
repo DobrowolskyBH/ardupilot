@@ -276,6 +276,14 @@
 # define MODE_AUTO_ENABLED ENABLED
 #endif
 
+//=============================================================================
+//////////////////////////////////////////////////////////////////////////////
+// Auto mode - allows vehicle to trace waypoints and perform automated actions
+#ifndef MODE_AUTO_AVOID_ENABLED
+# define MODE_AUTO_AVOID_ENABLED ENABLED
+#endif
+//==============================================================================
+
 //////////////////////////////////////////////////////////////////////////////
 // Brake mode - bring vehicle to stop
 #ifndef MODE_BRAKE_ENABLED
