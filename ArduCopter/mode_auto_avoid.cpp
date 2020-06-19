@@ -67,7 +67,7 @@ bool ModeAuto_Avoid::init(bool ignore_checks)
 //      relies on run_autopilot being called at 10hz which handles decision making and non-navigation related commands
 void ModeAuto_Avoid::run()
 {
-    //read_sensor_data();
+    read_sensor_data();
     // call the correct auto controller
     switch (_mode) {
 
@@ -1968,34 +1968,35 @@ bool ModeAuto_Avoid::verify_nav_delay(const AP_Mission::Mission_Command& cmd)
 //Implementacao da leitura dos dados do sensor
 void ModeAuto_Avoid::read_sensor_data()
 {   
-    int resolution = 20; //resolucao da matriz, valor de cada celula da matriz em cm
+    /*int resolution = 20; //resolucao da matriz, valor de cada celula da matriz em cm
     int range = 10000; //range do sensor
     int dimension = 50; //largura medida de um braco ao outro do vant
     int safe_dist = 50; //distancia de seguranca
     int tam_matriz; //tamanho da matriz
 
     int linha;
-    int coluna;
+    int coluna;*/
 
-    tam_matriz = range/resolution;
+    /*tam_matriz = range/resolution;
     if(tam_matriz % 2 == 0)
     {
         tam_matriz++;
     }
     int mapa[tam_matriz][tam_matriz];
     mapa[0][0] = 0;
-    mapa[0][0] = mapa[0][0] + 1;
+    mapa[0][0] = mapa[0][0] + 1;*/
     AP_Proximity *proximity = AP_Proximity::get_singleton();
     AP_Proximity::Proximity_Distance_Array dist_array;
     proximity->get_horizontal_distances(dist_array);
-    for(int i = 0; i < PROXIMITY_MAX_DIRECTION; i++) //utiliza os dados do sensor para preencher a matriz PROXIMITY_MAX_DIRECTION
+    gcs().send_text(MAV_SEVERITY_CRITICAL, "Angulo %5.3f", (double)PROXIMITY_MAX_DIRECTION);
+    /*for(int i = 0; i < PROXIMITY_MAX_DIRECTION; i++) //utiliza os dados do sensor para preencher a matriz PROXIMITY_MAX_DIRECTION
     {                                                //de distancia
         for(int j = 0; j < PROXIMITY_MAX_DIRECTION; j++)
         {
             mapa[i][j] = 0;
         }
-    }
-    for(int i = 0; i < PROXIMITY_MAX_DIRECTION; i++)
+    }*/
+    /*for(int i = 0; i < PROXIMITY_MAX_DIRECTION; i++)
     {
         if(dist_array.orientation[i] <= 90)
         {
@@ -2010,7 +2011,7 @@ void ModeAuto_Avoid::read_sensor_data()
                 gcs().send_text(MAV_SEVERITY_CRITICAL, "coluna %5.3f", (double)coluna);
             }
         }
-    }
+    }*/
     //dimension = dimension - resolution;
     //dimension = dimension/resolution;
     //mapa[(linha/2) + 1][0] = -1; //Valor -1 e a posicao que o drone ocupa
@@ -2020,10 +2021,10 @@ void ModeAuto_Avoid::read_sensor_data()
        // mapa[((linha/2) +1) - i][0];
     //}
 
-    for(int i = 0; i < dimension; i++)
+    /*for(int i = 0; i < dimension; i++)
     {
         linha = (linha / 2) + 1;
     }
-    dimension = dimension + safe_dist;
+    dimension = dimension + safe_dist;*/
     //float teste = dist_array.orientation[3];
 }

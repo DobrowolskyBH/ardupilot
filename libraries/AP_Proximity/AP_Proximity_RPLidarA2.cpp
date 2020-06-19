@@ -92,7 +92,7 @@ void AP_Proximity_RPLidarA2::update(void)
 // get maximum distance (in meters) of sensor
 float AP_Proximity_RPLidarA2::distance_max() const
 {
-    return 16.0f;  //16m max range RPLIDAR2, if you want to support the 8m version this is the only line to change
+    return 10.0f;  //16m max range RPLIDAR2, if you want to support the 8m version this is the only line to change
 }
 
 // get minimum distance (in meters) of sensor
@@ -307,6 +307,7 @@ void AP_Proximity_RPLidarA2::parse_response_data()
             // check if valid SCAN packet: a valid packet starts with startbits which are complementary plus a checkbit in byte+1
             if ((payload.sensor_scan.startbit == !payload.sensor_scan.not_startbit) && payload.sensor_scan.checkbit) {
                 const float angle_sign = (frontend.get_orientation(state.instance) == 1) ? -1.0f : 1.0f;
+                //PAERI AQUI
                 const float angle_deg = wrap_360(payload.sensor_scan.angle_q6/64.0f * angle_sign + frontend.get_yaw_correction(state.instance));
                 const float distance_m = (payload.sensor_scan.distance_q2/4000.0f);
 #if RP_DEBUG_LEVEL >= 2
