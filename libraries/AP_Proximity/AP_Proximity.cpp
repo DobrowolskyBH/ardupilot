@@ -209,7 +209,8 @@ void AP_Proximity::init(void)
         state[i].status = Status::NotConnected;
     }
 }
-
+//initialise the Proximity class. We do detection of attached sensors here
+// we don't allow for hot-plugging of sensors (i.e. reboot required)
 // update Proximity state for all instances. This should be called at a high rate by the main loop
 void AP_Proximity::update(void)
 {

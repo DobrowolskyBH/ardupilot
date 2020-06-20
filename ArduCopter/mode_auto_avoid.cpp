@@ -1988,7 +1988,16 @@ void ModeAuto_Avoid::read_sensor_data()
     AP_Proximity *proximity = AP_Proximity::get_singleton();
     AP_Proximity::Proximity_Distance_Array dist_array;
     proximity->get_horizontal_distances(dist_array);
-    gcs().send_text(MAV_SEVERITY_CRITICAL, "Angulo %5.3f", (double)PROXIMITY_MAX_DIRECTION);
+    float angle_deg;
+    float distance;
+
+    if(proximity->get_object_angle_and_distance(0, angle_deg, distance))
+        gcs().send_text(MAV_SEVERITY_CRITICAL, "Angulo %5.3f", (double)angle_deg);
+    //gcs().send_text(MAV_SEVERITY_CRITICAL, "Angulo %5.3f", (double)PROXIMITY_MAX_DIRECTION);
+    /*for(int i = 0; i < 8; i++)
+    {
+        gcs().send_text(MAV_SEVERITY_CRITICAL, "Angulo %5.3f", (double)dist_array.orientation[i]);
+    }*/
     /*for(int i = 0; i < PROXIMITY_MAX_DIRECTION; i++) //utiliza os dados do sensor para preencher a matriz PROXIMITY_MAX_DIRECTION
     {                                                //de distancia
         for(int j = 0; j < PROXIMITY_MAX_DIRECTION; j++)
