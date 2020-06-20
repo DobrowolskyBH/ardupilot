@@ -101,6 +101,8 @@ public:
     uint8_t get_object_count() const;
     bool get_object_angle_and_distance(uint8_t object_number, float& angle_deg, float &distance) const;
 
+    bool get_object_angle_and_distance2(uint8_t object_number, float& angle_deg, float &distance) const;
+
     // get maximum and minimum distances (in meters) of primary sensor
     float distance_max() const;
     float distance_min() const;

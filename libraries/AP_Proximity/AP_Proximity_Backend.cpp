@@ -275,6 +275,11 @@ void AP_Proximity_Backend::database_push(float angle, float distance)
     }
 }
 
+//==============================================================================================
+
+
+//==============================================================================================
+
 // update Object Avoidance database with Earth-frame point
 void AP_Proximity_Backend::database_push(float angle, float distance, uint32_t timestamp_ms, const Vector3f &current_pos, const Matrix3f &body_to_ned)
 {

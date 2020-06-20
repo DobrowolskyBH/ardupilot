@@ -1968,72 +1968,28 @@ bool ModeAuto_Avoid::verify_nav_delay(const AP_Mission::Mission_Command& cmd)
 //Implementacao da leitura dos dados do sensor
 void ModeAuto_Avoid::read_sensor_data()
 {   
-    /*int resolution = 20; //resolucao da matriz, valor de cada celula da matriz em cm
-    int range = 10000; //range do sensor
-    int dimension = 50; //largura medida de um braco ao outro do vant
-    int safe_dist = 50; //distancia de seguranca
-    int tam_matriz; //tamanho da matriz
-
-    int linha;
-    int coluna;*/
-
-    /*tam_matriz = range/resolution;
-    if(tam_matriz % 2 == 0)
-    {
-        tam_matriz++;
-    }
-    int mapa[tam_matriz][tam_matriz];
-    mapa[0][0] = 0;
-    mapa[0][0] = mapa[0][0] + 1;*/
     AP_Proximity *proximity = AP_Proximity::get_singleton();
-    AP_Proximity::Proximity_Distance_Array dist_array;
-    proximity->get_horizontal_distances(dist_array);
+    float angle_deg_vet[8];
+    float distance_vet[8];
     float angle_deg;
     float distance;
+    
+    angle_deg_vet[0] = 0;
+    distance_vet[0] = angle_deg_vet[0] + 0;
+    angle_deg_vet[0] = distance_vet[0] + 0;
 
-    if(proximity->get_object_angle_and_distance(0, angle_deg, distance))
-        gcs().send_text(MAV_SEVERITY_CRITICAL, "Angulo %5.3f", (double)angle_deg);
-    //gcs().send_text(MAV_SEVERITY_CRITICAL, "Angulo %5.3f", (double)PROXIMITY_MAX_DIRECTION);
-    /*for(int i = 0; i < 8; i++)
+    for(int i = 0; i < 8; i++)
     {
-        gcs().send_text(MAV_SEVERITY_CRITICAL, "Angulo %5.3f", (double)dist_array.orientation[i]);
-    }*/
-    /*for(int i = 0; i < PROXIMITY_MAX_DIRECTION; i++) //utiliza os dados do sensor para preencher a matriz PROXIMITY_MAX_DIRECTION
-    {                                                //de distancia
-        for(int j = 0; j < PROXIMITY_MAX_DIRECTION; j++)
+        if(proximity->get_object_angle_and_distance(i, angle_deg, distance))
         {
-            mapa[i][j] = 0;
+            angle_deg_vet[i] = angle_deg;
+            distance_vet[i] = distance;
         }
-    }*/
-    /*for(int i = 0; i < PROXIMITY_MAX_DIRECTION; i++)
-    {
-        if(dist_array.orientation[i] <= 90)
-        {
-            linha = dist_array.distance[i]*cosf(dist_array.orientation[i]);
-            coluna = dist_array.distance[i]*sinf(dist_array.orientation[i]);
-            mapa[linha][coluna] = 1;
-            static uint8_t counter = 0;
-            counter++;
-            if (counter > 50) {
-                counter = 0;
-                gcs().send_text(MAV_SEVERITY_CRITICAL, "Linha %5.3f", (double)linha);
-                gcs().send_text(MAV_SEVERITY_CRITICAL, "coluna %5.3f", (double)coluna);
-            }
-        }
-    }*/
-    //dimension = dimension - resolution;
-    //dimension = dimension/resolution;
-    //mapa[(linha/2) + 1][0] = -1; //Valor -1 e a posicao que o drone ocupa
-    //for(int i = 1; i <= dimension; i++)
-    //{
-      //  mapa[((linha/2) +1) - i][0];
-       // mapa[((linha/2) +1) - i][0];
-    //}
-
-    /*for(int i = 0; i < dimension; i++)
-    {
-        linha = (linha / 2) + 1;
     }
-    dimension = dimension + safe_dist;*/
-    //float teste = dist_array.orientation[3];
+    
+    for(int i = 0; i < 8; i++)
+    {
+        //gcs().send_text(MAV_SEVERITY_CRITICAL, "Angulo %5.3f", (double)angle_deg_vet[i]);
+        gcs().send_text(MAV_SEVERITY_CRITICAL, "Distancia %5.3f", (double)distance_vet[i]);
+    }
 }
