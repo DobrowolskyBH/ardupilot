@@ -1969,27 +1969,25 @@ bool ModeAuto_Avoid::verify_nav_delay(const AP_Mission::Mission_Command& cmd)
 void ModeAuto_Avoid::read_sensor_data()
 {   
     AP_Proximity *proximity = AP_Proximity::get_singleton();
-    float angle_deg_vet[8];
-    float distance_vet[8];
-    float angle_deg;
-    float distance;
-    
-    angle_deg_vet[0] = 0;
-    distance_vet[0] = angle_deg_vet[0] + 0;
-    angle_deg_vet[0] = distance_vet[0] + 0;
+    //float angle_deg = 0;
+    //float distance = 0;
 
-    for(int i = 0; i < 8; i++)
+    /*for(int i = 0; i < 179; i++)
     {
-        if(proximity->get_object_angle_and_distance(i, angle_deg, distance))
-        {
-            angle_deg_vet[i] = angle_deg;
-            distance_vet[i] = distance;
-        }
-    }
+        //angle_deg[i] = proximity->get_angle(i);
+       // distance[i] = proximity->get_distance(i);
+    }*/
     
-    for(int i = 0; i < 8; i++)
+
+    gcs().send_text(MAV_SEVERITY_CRITICAL, "Angle %5.3f", (double)proximity->get_angle(100));
+
+    gcs().send_text(MAV_SEVERITY_CRITICAL, "Distance %5.3f", (double)proximity->get_distance(100));
+
+    //hal.console->printf("TESTE MATHEUS\n");
+
+   /* for(int i = 0; i < 8; i++)
     {
         //gcs().send_text(MAV_SEVERITY_CRITICAL, "Angulo %5.3f", (double)angle_deg_vet[i]);
         gcs().send_text(MAV_SEVERITY_CRITICAL, "Distancia %5.3f", (double)distance_vet[i]);
-    }
+    }*/
 }

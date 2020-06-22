@@ -100,6 +100,13 @@ private:
     float _angle_deg_last;
     float _distance_m_last;
 
+    //=================================================================================
+
+    float angulo_ant;
+    float distancia_ant;
+
+    //=================================================================================
+
     struct PACKED _sensor_scan {
         uint8_t startbit      : 1;            ///< on the first revolution 1 else 0
         uint8_t not_startbit  : 1;            ///< complementary to startbit

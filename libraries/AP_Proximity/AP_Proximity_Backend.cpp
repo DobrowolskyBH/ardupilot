@@ -75,6 +75,29 @@ bool AP_Proximity_Backend::get_object_angle_and_distance(uint8_t object_number, 
     return false;
 }
 
+//=========================================================================
+
+bool AP_Proximity_Backend::get_object_angle_and_distance2(uint8_t object_number, float& angle_deg, float &distance) const
+{
+    angle_deg = _angle[object_number];
+    distance = _distance[object_number];
+    return true;
+}
+
+float AP_Proximity_Backend::get_distance(uint8_t object_number) 
+{
+    return _distance[object_number];
+}
+
+float AP_Proximity_Backend::get_angle(uint8_t object_number)
+{
+     return _angle[object_number];
+}
+
+
+
+//=========================================================================
+
 // get distances in PROXIMITY_MAX_DIRECTION directions. used for sending distances to ground station
 bool AP_Proximity_Backend::get_horizontal_distances(AP_Proximity::Proximity_Distance_Array &prx_dist_array) const
 {
@@ -233,6 +256,7 @@ uint8_t AP_Proximity_Backend::convert_angle_to_sector(float angle_degrees) const
     return wrap_360(angle_degrees + (PROXIMITY_SECTOR_WIDTH_DEG * 0.5f)) / 45.0f;
 }
 
+
 // check if a reading should be ignored because it falls into an ignore area
 bool AP_Proximity_Backend::ignore_reading(uint16_t angle_deg) const
 {
@@ -274,11 +298,6 @@ void AP_Proximity_Backend::database_push(float angle, float distance)
         database_push(angle, distance, AP_HAL::millis(), current_pos, body_to_ned);
     }
 }
-
-//==============================================================================================
-
-
-//==============================================================================================
 
 // update Object Avoidance database with Earth-frame point
 void AP_Proximity_Backend::database_push(float angle, float distance, uint32_t timestamp_ms, const Vector3f &current_pos, const Matrix3f &body_to_ned)

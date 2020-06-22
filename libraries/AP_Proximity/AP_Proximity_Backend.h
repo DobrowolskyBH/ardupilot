@@ -59,6 +59,16 @@ public:
     uint8_t get_object_count() const;
     bool get_object_angle_and_distance(uint8_t object_number, float& angle_deg, float &distance) const;
 
+    //==================================================================================================
+
+    bool get_object_angle_and_distance2(uint8_t object_number, float& angle_deg, float &distance) const;
+
+    float get_distance(uint8_t object_number);
+
+    float get_angle(uint8_t object_number);
+
+    //===================================================================================================
+
     // get distances in 8 directions. used for sending distances to ground station
     bool get_horizontal_distances(AP_Proximity::Proximity_Distance_Array &prx_dist_array) const;
 
@@ -98,6 +108,13 @@ protected:
     float _distance[PROXIMITY_NUM_SECTORS];         // distance to closest object within each sector
     bool _distance_valid[PROXIMITY_NUM_SECTORS];    // true if a valid distance received for each sector
 
+//================================================
+
+    float _angle2[360];
+    float  _distance2[360];
+    bool _distance_valid2[360];
+
+//================================================
     // fence boundary
     Vector2f _sector_edge_vector[PROXIMITY_NUM_SECTORS];    // vector for right-edge of each sector, used to speed up calculation of boundary
     Vector2f _boundary_point[PROXIMITY_NUM_SECTORS];        // bounding polygon around the vehicle calculated conservatively for object avoidance

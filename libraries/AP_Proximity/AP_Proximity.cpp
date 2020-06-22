@@ -406,6 +406,37 @@ bool AP_Proximity::get_object_angle_and_distance(uint8_t object_number, float& a
     return drivers[primary_instance]->get_object_angle_and_distance(object_number, angle_deg, distance);
 }
 
+//=========================================================================
+
+bool AP_Proximity::get_object_angle_and_distance2(uint8_t object_number, float& angle_deg, float& distance) const
+{
+    if (!valid_instance(primary_instance)) {
+        return false;
+    }
+    // get angle and distance from backend
+    return drivers[primary_instance]->get_object_angle_and_distance2(object_number, angle_deg, distance);
+}
+
+float AP_Proximity::get_distance(uint8_t object_number)
+{
+    if (!valid_instance(primary_instance)) {
+        return false;
+    }
+    // get angle and distance from backend
+    return drivers[primary_instance]->get_distance(object_number);
+}
+
+float AP_Proximity::get_angle(uint8_t object_number)
+{
+    if (!valid_instance(primary_instance)) {
+        return false;
+    }
+    // get angle and distance from backend
+    return drivers[primary_instance]->get_angle(object_number);
+}
+
+//=========================================================================
+
 // get maximum and minimum distances (in meters) of primary sensor
 float AP_Proximity::distance_max() const
 {

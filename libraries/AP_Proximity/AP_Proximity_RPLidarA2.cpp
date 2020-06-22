@@ -30,6 +30,8 @@
 #include "AP_Proximity_RPLidarA2.h"
 #include <ctype.h>
 #include <stdio.h>
+#include <GCS_MAVLink/GCS.h>
+
 
 #define RP_DEBUG_LEVEL 0
 
@@ -301,6 +303,7 @@ void AP_Proximity_RPLidarA2::parse_response_descriptor()
 
 void AP_Proximity_RPLidarA2::parse_response_data()
 {
+    static uint16_t contador = 0;
     switch (_response_type){
         case ResponseType_SCAN:
             Debug(2, "UART %02x %02x%02x %02x%02x", payload[0], payload[2], payload[1], payload[4], payload[3]); //show HEX values
@@ -314,6 +317,34 @@ void AP_Proximity_RPLidarA2::parse_response_data()
                 const float quality = payload.sensor_scan.quality;
                 Debug(2, "                                       D%02.2f A%03.1f Q%02d", distance_m, angle_deg, quality);
 #endif
+
+                //==============================================
+
+                if(angle_deg >= contador && angle_deg < (contador +1))
+                {
+                    if(distancia_ant > distance_m)
+                    {
+                        distancia_ant = distance_m;
+                        angulo_ant = angle_deg;
+                    }
+                }
+                if(angle_deg >= contador)
+                {
+                    _angle2[contador] = angulo_ant;
+                    _distance2[contador] = distancia_ant;
+                    _distance_valid2[contador] = true;
+                    contador++;
+                    if(contador == 360)
+                    {
+                        contador = 0;
+                    }
+                }
+
+                //==============================================
+                //gcs().send_text(MAV_SEVERITY_CRITICAL, "Angle %5.3f", (double)angle_deg);
+
+                //gcs().send_text(MAV_SEVERITY_CRITICAL, "Distance %5.3f", (double)distance_m);
+
                 _last_distance_received_ms = AP_HAL::millis();
                 if (!ignore_reading(angle_deg)) {
                     const uint8_t sector = convert_angle_to_sector(angle_deg);
@@ -328,6 +359,7 @@ void AP_Proximity_RPLidarA2::parse_response_data()
                             _angle[_last_sector] = _angle_deg_last;
                             _distance[_last_sector] = _distance_m_last;
                             _distance_valid[_last_sector] = true;
+
                             // update boundary used for avoidance
                             update_boundary_for_sector(_last_sector, true);
                             // initialize the new sector
@@ -338,7 +370,7 @@ void AP_Proximity_RPLidarA2::parse_response_data()
                     } else {
                         _distance_valid[sector] = false;
                     }
-                }
+               }
             } else {
                 // not valid payload packet
                 Debug(1, "Invalid Payload");
