@@ -24,6 +24,7 @@
 #include "AP_Proximity_SITL.h"
 #include "AP_Proximity_MorseSITL.h"
 #include "AP_Proximity_AirSimSITL.h"
+#include <GCS_MAVLink/GCS.h>
 
 extern const AP_HAL::HAL &hal;
 
@@ -423,6 +424,7 @@ float AP_Proximity::get_distance(uint8_t object_number)
         return false;
     }
     // get angle and distance from backend
+    gcs().send_text(MAV_SEVERITY_CRITICAL, "distancia Proximity %5.3f", (double)drivers[primary_instance]->get_distance(object_number));
     return drivers[primary_instance]->get_distance(object_number);
 }
 
