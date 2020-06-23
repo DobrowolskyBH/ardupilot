@@ -334,7 +334,7 @@ void AP_Proximity_RPLidarA2::parse_response_data()
                     //gcs().send_text(MAV_SEVERITY_CRITICAL, "contador %5.3f", (double)contador);
                     _angle2[contador] = angle_deg;
                     _distance2[contador] = distance_m;
-                    _distance_valid2[contador] = true;
+                    //_distance_valid2[contador] = true;
                     //gcs().send_text(MAV_SEVERITY_CRITICAL, "distancia_ant %5.3f", (double)_distance2[contador]);
                     contador++;
                 }

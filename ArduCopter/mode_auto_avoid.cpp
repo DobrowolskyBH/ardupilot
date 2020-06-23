@@ -1970,8 +1970,8 @@ void ModeAuto_Avoid::read_sensor_data()
 {   
     AP_Proximity *proximity = AP_Proximity::get_singleton();
     //float angle_deg = 0;
-    float distance = 0;
-    distance = proximity->get_distance(100) + distance;
+    //float distance = 0;
+    //distance = proximity->get_distance(100) + distance;
     /*for(int i = 0; i < 179; i++)
     {
         //angle_deg[i] = proximity->get_angle(i);
@@ -1979,9 +1979,9 @@ void ModeAuto_Avoid::read_sensor_data()
     }*/
     
 
-    //gcs().send_text(MAV_SEVERITY_CRITICAL, "Angle %5.3f", (double)proximity->get_angle(100));
+    gcs().send_text(MAV_SEVERITY_CRITICAL, "Angle %5.3f", (double)proximity->get_angle(100));
 
-    //gcs().send_text(MAV_SEVERITY_CRITICAL, "Distance %5.3f", (double)proximity->get_distance(100));
+    gcs().send_text(MAV_SEVERITY_CRITICAL, "Distance %5.3f", (double)proximity->get_distance(100));
 
     //hal.console->printf("TESTE MATHEUS\n");
 

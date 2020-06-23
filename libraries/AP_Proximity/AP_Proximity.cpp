@@ -420,21 +420,15 @@ bool AP_Proximity::get_object_angle_and_distance2(uint8_t object_number, float& 
 
 float AP_Proximity::get_distance(uint8_t object_number)
 {
-    if (!valid_instance(primary_instance)) {
-        return false;
-    }
     // get angle and distance from backend
-    gcs().send_text(MAV_SEVERITY_CRITICAL, "distancia Proximity %5.3f", (double)drivers[primary_instance]->get_distance(object_number));
-    return drivers[primary_instance]->get_distance(object_number);
+    //gcs().send_text(MAV_SEVERITY_CRITICAL, "distancia Proximity %5.3f", (double)drivers[primary_instance]->get_distance_back(object_number));
+    return drivers[primary_instance]->get_distance_back(object_number);
 }
 
 float AP_Proximity::get_angle(uint8_t object_number)
 {
-    if (!valid_instance(primary_instance)) {
-        return false;
-    }
     // get angle and distance from backend
-    return drivers[primary_instance]->get_angle(object_number);
+    return drivers[primary_instance]->get_angle_back(object_number);
 }
 
 //=========================================================================

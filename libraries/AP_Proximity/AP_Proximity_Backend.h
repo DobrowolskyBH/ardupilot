@@ -63,9 +63,9 @@ public:
 
     bool get_object_angle_and_distance2(uint8_t object_number, float& angle_deg, float &distance) const;
 
-    float get_distance(uint8_t object_number);
+    float get_distance_back(uint8_t object_number);
 
-    float get_angle(uint8_t object_number);
+    float get_angle_back(uint8_t object_number);
 
     //===================================================================================================
 
@@ -112,7 +112,7 @@ protected:
 
     float _angle2[360];
     float _distance2[360];
-    bool _distance_valid2[360];
+    //bool _distance_valid2[360];
 
 //================================================
     // fence boundary

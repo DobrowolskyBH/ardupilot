@@ -85,15 +85,15 @@ bool AP_Proximity_Backend::get_object_angle_and_distance2(uint8_t object_number,
     return true;
 }
 
-float AP_Proximity_Backend::get_distance(uint8_t object_number) 
+float AP_Proximity_Backend::get_distance_back(uint8_t object_number) 
 {
-    gcs().send_text(MAV_SEVERITY_CRITICAL, "distancia backend %5.3f", (double)_distance2[object_number]);
-    return _distance[object_number];
+    //gcs().send_text(MAV_SEVERITY_CRITICAL, "distancia backend %5.3f", (double)_distance2[object_number]);
+    return _distance2[object_number];
 }
 
-float AP_Proximity_Backend::get_angle(uint8_t object_number)
+float AP_Proximity_Backend::get_angle_back(uint8_t object_number)
 {
-     return _angle[object_number];
+     return _angle2[object_number];
 }
 
 
