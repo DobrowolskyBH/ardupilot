@@ -1977,11 +1977,38 @@ void ModeAuto_Avoid::read_sensor_data()
         //angle_deg[i] = proximity->get_angle(i);
        // distance[i] = proximity->get_distance(i);
     }*/
+    uint16_t inicio;
+    uint16_t fim = 0;
+    bool tem_angulo = false;
+    for(int i = 0; i < 360; i++)
+    {
+        if(proximity->get_angle(i) == 0)
+        {
+            tem_angulo = true;
+            inicio = i;
+            fim = i - 1;
+            if((i -1) < 0 )
+            {
+                fim = 359;
+            }
+            i = 360;
+            
+        }
+    }
+    inicio = inicio + 0;
+    fim = fim + 0;
+    if(!tem_angulo)
+    {
+        gcs().send_text(MAV_SEVERITY_CRITICAL, "ANGULO NAO ENCONTRADO %5.3f", (double)0);
+    }
+    else
+    {
+        gcs().send_text(MAV_SEVERITY_CRITICAL, "Angle %5.3f", (double)proximity->get_angle(inicio));    
+    }
     
+    //gcs().send_text(MAV_SEVERITY_CRITICAL, "Angle %5.3f", (double)proximity->get_angle(0));
 
-    gcs().send_text(MAV_SEVERITY_CRITICAL, "Angle %5.3f", (double)proximity->get_angle(100));
-
-    gcs().send_text(MAV_SEVERITY_CRITICAL, "Distance %5.3f", (double)proximity->get_distance(100));
+   // gcs().send_text(MAV_SEVERITY_CRITICAL, "Distance %5.3f", (double)proximity->get_distance(0));
 
     //hal.console->printf("TESTE MATHEUS\n");
 
