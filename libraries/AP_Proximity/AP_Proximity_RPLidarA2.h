@@ -68,6 +68,8 @@ private:
     bool initialise();
     void set_scan_mode();
 
+    bool inteiro(float angulo);
+
     // send request for something from sensor
     void send_request_for_health();
     void parse_response_data();
@@ -103,8 +105,8 @@ private:
     //=================================================================================
 
     float angulo_ant;
-    float distancia_ant;
-
+    float distancia_ant = 999999;
+    
     //=================================================================================
 
     struct PACKED _sensor_scan {

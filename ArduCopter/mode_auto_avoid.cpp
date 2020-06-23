@@ -1979,7 +1979,7 @@ void ModeAuto_Avoid::read_sensor_data()
     }*/
     
 
-    gcs().send_text(MAV_SEVERITY_CRITICAL, "Angle %5.3f", (double)proximity->get_angle(100));
+    //gcs().send_text(MAV_SEVERITY_CRITICAL, "Angle %5.3f", (double)proximity->get_angle(100));
 
     gcs().send_text(MAV_SEVERITY_CRITICAL, "Distance %5.3f", (double)proximity->get_distance(100));
 

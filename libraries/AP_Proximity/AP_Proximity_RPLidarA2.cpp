@@ -301,9 +301,15 @@ void AP_Proximity_RPLidarA2::parse_response_descriptor()
     _rp_state = rp_unknown;
 }
 
+bool AP_Proximity_RPLidarA2::inteiro(float angulo)
+{
+    int trunc = (int) angulo;
+    return (angulo == trunc);
+}
+
 void AP_Proximity_RPLidarA2::parse_response_data()
 {
-    static uint16_t contador = 0;
+    static int contador;
     switch (_response_type){
         case ResponseType_SCAN:
             Debug(2, "UART %02x %02x%02x %02x%02x", payload[0], payload[2], payload[1], payload[4], payload[3]); //show HEX values
@@ -319,27 +325,19 @@ void AP_Proximity_RPLidarA2::parse_response_data()
 #endif
 
                 //==============================================
-
-                if(angle_deg >= contador && angle_deg < (contador +1))
+                if(contador >= 360)
                 {
-                    if(distancia_ant > distance_m)
-                    {
-                        distancia_ant = distance_m;
-                        angulo_ant = angle_deg;
-                    }
+                    contador = 0;
                 }
-                if(angle_deg >= contador)
+                if(inteiro(angle_deg))
                 {
-                    _angle2[contador] = angulo_ant;
-                    _distance2[contador] = distancia_ant;
+                    //gcs().send_text(MAV_SEVERITY_CRITICAL, "contador %5.3f", (double)contador);
+                    _angle2[contador] = angle_deg;
+                    _distance2[contador] = distance_m;
                     _distance_valid2[contador] = true;
+                    //gcs().send_text(MAV_SEVERITY_CRITICAL, "distancia_ant %5.3f", (double)_distance2[contador]);
                     contador++;
-                    if(contador == 360)
-                    {
-                        contador = 0;
-                    }
                 }
-
                 //==============================================
                 //gcs().send_text(MAV_SEVERITY_CRITICAL, "Angle %5.3f", (double)angle_deg);
 
