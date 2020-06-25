@@ -607,6 +607,8 @@ int32_t ModeAuto_Avoid::wp_bearing() const
 }
 
 //==========================================================================
+//Interessante
+
 bool ModeAuto_Avoid::get_wp(Location& destination)
 {
     switch (_mode) {
@@ -1965,56 +1967,85 @@ bool ModeAuto_Avoid::verify_nav_delay(const AP_Mission::Mission_Command& cmd)
 #endif
 
 //==========================================================================
+
+void ModeAuto_Avoid::prenche_vetor(Angulo_distancia obstaculo[])
+{
+    AP_Proximity *proximity = AP_Proximity::get_singleton();
+
+    for(int i = 0; i < 360; i++)
+    {
+        obstaculo[i].angulo = proximity->get_angle(i);
+        obstaculo[i].distancia = proximity->get_distance(i);
+    }
+}
+
+//===========================================================================
+
+//===========================================================================
+
+void ModeAuto_Avoid::valida_setor(Angulo_distancia setores_esquerda[], Angulo_distancia setores_direita[])
+{
+    Angulo_distancia obstaculo[360];
+
+    prenche_vetor(obstaculo);
+
+    for(int i = 0; i < 359; i++)
+    {
+        if(obstaculo[i].distancia > 0 && obstaculo[i].distancia <= 2)
+        {
+            //Setores a direita 0 a 90
+            if(obstaculo[i].angulo >= 0 && obstaculo[i].angulo < 30)
+            {
+                setores_direita[0].valido = true;
+            }
+            if(obstaculo[i].angulo >= 30 && obstaculo[i].angulo < 60)
+            {
+                setores_direita[1].valido = true;
+            }
+            if(obstaculo[i].angulo >= 60 && obstaculo[i].angulo < 90)
+            {
+                setores_direita[2].valido = true;
+            }
+
+            //Setores a esquerda 270 a 360
+            if(obstaculo[i].angulo >= 330 && obstaculo[i].angulo < 360)
+            {
+                setores_esquerda[0].valido = true;
+            }
+            if(obstaculo[i].angulo >= 300 && obstaculo[i].angulo < 330)
+            {
+                setores_esquerda[1].valido = true;
+            }
+            if(obstaculo[i].angulo >= 270 && obstaculo[i].angulo < 300)
+            {
+                setores_esquerda[2].valido = true;
+            }
+        }
+    }
+}
+
+//===========================================================================
+
+//==========================================================================
 //Implementacao da leitura dos dados do sensor
 void ModeAuto_Avoid::read_sensor_data()
 {   
-    AP_Proximity *proximity = AP_Proximity::get_singleton();
-    //float angle_deg = 0;
-    //float distance = 0;
-    //distance = proximity->get_distance(100) + distance;
-    /*for(int i = 0; i < 179; i++)
+    Angulo_distancia setores_esquerda[3];
+    Angulo_distancia setores_direita[3];
+    valida_setor(setores_esquerda, setores_direita);
+
+    for(int i = 0; i < 3; i++)
     {
-        //angle_deg[i] = proximity->get_angle(i);
-       // distance[i] = proximity->get_distance(i);
-    }*/
-    uint16_t inicio;
-    uint16_t fim = 0;
-    bool tem_angulo = false;
-    for(int i = 0; i < 360; i++)
-    {
-        if(proximity->get_angle(i) == 0)
+        if(setores_esquerda[i].valido)
         {
-            tem_angulo = true;
-            inicio = i;
-            fim = i - 1;
-            if((i -1) < 0 )
-            {
-                fim = 359;
-            }
-            i = 360;
-            
+            gcs().send_text(MAV_SEVERITY_CRITICAL, "Setor esqueda %5.3f", (double)i);
+        }
+        if(setores_direita[i].valido)
+        {
+            gcs().send_text(MAV_SEVERITY_CRITICAL, "Setor direita %5.3f", (double)i);
         }
     }
-    inicio = inicio + 0;
-    fim = fim + 0;
-    if(!tem_angulo)
-    {
-        gcs().send_text(MAV_SEVERITY_CRITICAL, "ANGULO NAO ENCONTRADO %5.3f", (double)0);
-    }
-    else
-    {
-        gcs().send_text(MAV_SEVERITY_CRITICAL, "Angle %5.3f", (double)proximity->get_angle(inicio));    
-    }
-    
     //gcs().send_text(MAV_SEVERITY_CRITICAL, "Angle %5.3f", (double)proximity->get_angle(0));
 
    // gcs().send_text(MAV_SEVERITY_CRITICAL, "Distance %5.3f", (double)proximity->get_distance(0));
-
-    //hal.console->printf("TESTE MATHEUS\n");
-
-   /* for(int i = 0; i < 8; i++)
-    {
-        //gcs().send_text(MAV_SEVERITY_CRITICAL, "Angulo %5.3f", (double)angle_deg_vet[i]);
-        gcs().send_text(MAV_SEVERITY_CRITICAL, "Distancia %5.3f", (double)distance_vet[i]);
-    }*/
 }

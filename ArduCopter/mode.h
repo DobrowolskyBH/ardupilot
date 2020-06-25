@@ -423,6 +423,15 @@ private:
     //==========================================================================
     //Adicionando novos metodos aqui
     void read_sensor_data();
+    
+    struct Angulo_distancia
+    {
+        float distancia;
+        float angulo;
+        bool valido = false;
+    };
+    void prenche_vetor(Angulo_distancia obstaculo[]);
+    void valida_setor(Angulo_distancia setores_esquerda[], Angulo_distancia setores_direita[]);
 
     //==========================================================================
 
