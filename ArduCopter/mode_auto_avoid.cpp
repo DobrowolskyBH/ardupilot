@@ -2064,16 +2064,14 @@ void ModeAuto_Avoid::read_sensor_data()
         cmd.content.location = localizacao;
         cmd.index = 0;
         mission.add_cmd(cmd);
-        if(!mission.replace_cmd(start, cmd))
-        {
-            gcs().send_text(MAV_SEVERITY_CRITICAL, "DEU RUIN %5.3f", (double)0);
-        }
-        
+        mission.set_current_cmd(start, true);
     }
+    //LER 1323
     /*AP_Mission::Mission_Command cmd_aux;
-    for(uint8_t i = start; i < (unsigned) mission._cmd_total; i++)
+    for(uint8_t i = (unsigned) mission._cmd_total; i > start; i--)
     {
-        
+        mission.get_cmd
+        mission.replace_cmd(start, cmd);   
     }*/
     
     //mission.read_cmd_from_storage(0, cmd);
