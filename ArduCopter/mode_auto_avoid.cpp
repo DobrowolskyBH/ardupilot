@@ -2034,7 +2034,7 @@ void ModeAuto_Avoid::read_sensor_data()
     Angulo_distancia setores_direita[3];
     valida_setor(setores_esquerda, setores_direita);
 
-    for(int i = 0; i < 3; i++)
+    /*for(int i = 0; i < 3; i++)
     {
         if(setores_esquerda[i].valido)
         {
@@ -2044,7 +2044,53 @@ void ModeAuto_Avoid::read_sensor_data()
         {
             gcs().send_text(MAV_SEVERITY_CRITICAL, "Setor direita %5.3f", (double)i);
         }
+    }*/
+
+    //void AC_WPNav::shift_wp_origin_to_current_pos() seta a posicao atual como home
+    //bool AC_WPNav::set_wp_destination(const Vector3f& destination, bool terrain_alt) seta o wp de destino
+    Vector3f destino;
+    destino.x = 300.0f;
+    destino.y = 200.0f;
+    destino.z = inertial_nav.get_position().z;
+
+    copter.wp_nav->set_wp_destination(destino, false);
+    Location localizacao;
+    uint16_t start = mission.get_prev_nav_cmd_index();
+    AP_Mission::Mission_Command cmd;
+    if (copter.wp_nav->get_wp_destination(localizacao))
+    {
+        cmd.id = MAV_CMD_NAV_WAYPOINT;
+        cmd.p1 = 0;
+        cmd.content.location = localizacao;
+        cmd.index = 0;
+        mission.add_cmd(cmd);
+        if(!mission.replace_cmd(start, cmd))
+        {
+            gcs().send_text(MAV_SEVERITY_CRITICAL, "DEU RUIN %5.3f", (double)0);
+        }
+        
     }
+    /*AP_Mission::Mission_Command cmd_aux;
+    for(uint8_t i = start; i < (unsigned) mission._cmd_total; i++)
+    {
+        
+    }*/
+    
+    //mission.read_cmd_from_storage(0, cmd);
+    //logger.Write_Mission_Cmd(mission, cmd);
+    /*AP_Mission::Mission_Command cmd;
+    cmd.id = MAV_CMD_NAV_WAYPOINT;
+    cmd.p1 = 0;
+    cmd.content.location = Location{300, 200, 2, Location::AltFrame::ABSOLUTE};
+    mission.add_cmd(cmd);*/
+    //static_cast<double>(loc.lat * 1.0e-7f),
+    //static_cast<double>(loc.lng * 1.0e-7f),
+    //static_cast<double>(loc.alt * 0.01f));
+
+    //if(ahrs().get_origin(home))
+    //gcs().send_text(MAV_SERVERITY_CRITICAL, "Wp_Home x %5.3f", (double)home.x);
+
+
     //gcs().send_text(MAV_SEVERITY_CRITICAL, "Angle %5.3f", (double)proximity->get_angle(0));
 
    // gcs().send_text(MAV_SEVERITY_CRITICAL, "Distance %5.3f", (double)proximity->get_distance(0));
