@@ -2033,6 +2033,27 @@ void ModeAuto_Avoid::read_sensor_data()
     Angulo_distancia setores_esquerda[3];
     Angulo_distancia setores_direita[3];
     valida_setor(setores_esquerda, setores_direita);
+    Vector3f velocidade;
+    velocidade.z = 0.0f;
+    if(setores_esquerda[0].valido == true || setores_direita[0].valido == true)
+    {
+        if(setores_esquerda[0].valido == true)
+        {
+            //setar velocidade direita
+            velocidade.x = 1.0f;
+            velocidade.y = 0.0f;
+        }
+        else
+        {
+            //setar velocidade pra esquerda
+            velocidade.x = -1.0f;
+            velocidade.y = 0.0f;
+        }
+        velocidade.normalize();
+        velocidade.x *= copter.wp_nav->get_default_speed_xy();
+        velocidade.y *= copter.wp_nav->get_default_speed_xy();
+        copter.mode_avoid_adsb.set_velocity(velocidade);
+    }
 
     /*for(int i = 0; i < 3; i++)
     {
@@ -2048,7 +2069,7 @@ void ModeAuto_Avoid::read_sensor_data()
 
     //void AC_WPNav::shift_wp_origin_to_current_pos() seta a posicao atual como home
     //bool AC_WPNav::set_wp_destination(const Vector3f& destination, bool terrain_alt) seta o wp de destino
-    Vector3f destino;
+    /*Vector3f destino;
     destino.x = 300.0f;
     destino.y = 200.0f;
     destino.z = inertial_nav.get_position().z;
@@ -2065,7 +2086,7 @@ void ModeAuto_Avoid::read_sensor_data()
         cmd.index = 0;
         mission.add_cmd(cmd);
         mission.set_current_cmd(start, true);
-    }
+    }*/
     //LER 1323
     /*AP_Mission::Mission_Command cmd_aux;
     for(uint8_t i = (unsigned) mission._cmd_total; i > start; i--)
