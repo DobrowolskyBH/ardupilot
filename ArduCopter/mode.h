@@ -430,6 +430,7 @@ private:
         float angulo;
         bool valido = false;
     };
+    bool verifica_wp = true;
     void prenche_vetor(Angulo_distancia obstaculo[]);
     void valida_setor(Angulo_distancia setores_esquerda[], Angulo_distancia setores_direita[]);
 
