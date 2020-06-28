@@ -2038,13 +2038,13 @@ void ModeAuto_Avoid::read_sensor_data()
     //Vector3f velocidade;
     //velocidade.z = 0.0f;
     
-    /*
-    if(mission.get_current_nav_index() != 1)
+    AP_Mission::Mission_Command cmd_aux;
+    current_cmd = mission.get_current_nav_cmd();
+    /*if(!current_cmd.create)
     {
         verifica_wp = true;
         gcs().send_text(MAV_SEVERITY_CRITICAL, "NOVO NOVO NOVO NOVO NOVO NOVO  %5.3f", (double)mission.get_current_nav_index());
-    }
-    */
+    }*/
 
     if(setores_esquerda[0].valido == true || setores_direita[0].valido == true)
     {   
@@ -2058,8 +2058,8 @@ void ModeAuto_Avoid::read_sensor_data()
                 //setar velocidade direita
                 //velocidade.x = -25.0f;//5.0f;
                 //velocidade.y = 0.0f;//10.0f;
-                destino.x = -60.0f;
-                destino.y = 100.0f;
+                destino.x =  50.00f;//-60.0f;
+                destino.y = 0.0f;
                 //gcs().send_text(MAV_SEVERITY_CRITICAL, "VAI PRA DIREITA %5.3f", (double)0);
             }
             else if (setores_direita[0].valido == true)
@@ -2067,22 +2067,42 @@ void ModeAuto_Avoid::read_sensor_data()
                 //setar velocidade pra esquerda
                 //velocidade.x = 25.0f; //-5.0f;
                 //velocidade.y = 0.0f; //10.0f;
-                destino.x = 60.0f;
-                destino.y = 100.0f;
+                destino.x = -50.00f;//60.0f;
+                destino.y = 0.0f;
                 //gcs().send_text(MAV_SEVERITY_CRITICAL, "VAI PRA ESQUERDA %5.3f", (double)0);
             }
             Vector3f aux;
-            if(aux != destino)
+            if(verifica_wp)
             {
+                /*if(copter.set_home_to_current_location(false))
+                {
+                    //copter.set_home_to_current_location_inflight()
+                    verifica_wp = false;
+                }*/
+                Location local;
+                copter.wp_nav->get_wp_destination(local);
+                AP_Mission::Mission_Command proximo_wp;
+                proximo_wp = mission.get_current_do_cmd();
                 AP_Mission::Mission_Command cmd;
                 copter.wp_nav->set_wp_destination(destino, false);
+                
                 cmd.id = MAV_CMD_NAV_WAYPOINT;
                 cmd.p1 = 0;
-                cmd.content.location = destino;
+                cmd.content.location = inertial_nav.get_position();
+                cmd.content.location.offset(0.5, 0);
                 cmd.index = 0;
+                cmd.create = true;
                 mission.add_cmd(cmd);
+                
+                proximo_wp.id = MAV_CMD_NAV_WAYPOINT;
+                proximo_wp.p1 = 0;
+                proximo_wp.content.location = local;
+                proximo_wp.index = 0;
+                mission.add_cmd(proximo_wp);
+                
                 current_cmd = cmd;
-                copter.wp_nav->get_vector_NEU(current_cmd.content.location, aux, false);
+                verifica_wp = false;
+               
             }
             
             //velocidade.normalize();

@@ -272,6 +272,7 @@ public:
         uint16_t id;                // mavlink command id
         uint16_t p1;                // general purpose parameter 1
         Content content;
+        bool create = false;
 
         // return a human-readable interpretation of the ID stored in this command
         const char *type() const;
