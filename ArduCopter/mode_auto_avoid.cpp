@@ -2033,12 +2033,19 @@ void ModeAuto_Avoid::read_sensor_data()
     Angulo_distancia setores_esquerda[3];
     Angulo_distancia setores_direita[3];
     valida_setor(setores_esquerda, setores_direita);
+    static bool verifica_wp = true;
+    static AP_Mission::Mission_Command current_cmd;
     //Vector3f velocidade;
     //velocidade.z = 0.0f;
-    if(mission.get_current_nav_index() != 0)
+    
+    /*
+    if(mission.get_current_nav_index() != 1)
     {
         verifica_wp = true;
+        gcs().send_text(MAV_SEVERITY_CRITICAL, "NOVO NOVO NOVO NOVO NOVO NOVO  %5.3f", (double)mission.get_current_nav_index());
     }
+    */
+
     if(setores_esquerda[0].valido == true || setores_direita[0].valido == true)
     {   
         Vector3f destino;     
@@ -2064,17 +2071,20 @@ void ModeAuto_Avoid::read_sensor_data()
                 destino.y = 100.0f;
                 //gcs().send_text(MAV_SEVERITY_CRITICAL, "VAI PRA ESQUERDA %5.3f", (double)0);
             }
-            if(verifica_wp)
+            Vector3f aux;
+            if(aux != destino)
             {
-                copter.wp_nav->set_wp_destination(destino, false);
                 AP_Mission::Mission_Command cmd;
+                copter.wp_nav->set_wp_destination(destino, false);
                 cmd.id = MAV_CMD_NAV_WAYPOINT;
                 cmd.p1 = 0;
                 cmd.content.location = destino;
                 cmd.index = 0;
                 mission.add_cmd(cmd);
-                verifica_wp = false;
+                current_cmd = cmd;
+                copter.wp_nav->get_vector_NEU(current_cmd.content.location, aux, false);
             }
+            
             //velocidade.normalize();
             //copter->pos_control.set
             //AC_PosControl *pos_control;

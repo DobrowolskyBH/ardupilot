@@ -38,6 +38,7 @@ class AC_WPNav
 {
 public:
 
+    bool get_vector_NEU(const Location &loc, Vector3f &vec, bool &terrain_alt);
     // spline segment end types enum
     enum spline_segment_end_type {
         SEGMENT_END_STOP = 0,
@@ -288,7 +289,7 @@ protected:
 
     // convert location to vector from ekf origin.  terrain_alt is set to true if resulting vector's z-axis should be treated as alt-above-terrain
     //      returns false if conversion failed (likely because terrain data was not available)
-    bool get_vector_NEU(const Location &loc, Vector3f &vec, bool &terrain_alt);
+    //bool get_vector_NEU(const Location &loc, Vector3f &vec, bool &terrain_alt);
 
     // set heading used for spline and waypoint navigation
     void set_yaw_cd(float heading_cd);
