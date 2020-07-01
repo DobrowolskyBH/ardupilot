@@ -76,6 +76,15 @@ void AP_Mission::start()
     }
 }
 
+//=================================================================================================================
+
+void AP_Mission::set_start()
+{
+    advance_current_nav_cmd();
+}
+
+//==================================================================================================================
+
 /// stop - stops mission execution.  subsequent calls to update() will have no effect until the mission is started or resumed
 void AP_Mission::stop()
 {
